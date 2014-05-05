@@ -1,0 +1,45 @@
+@(itemname: String, expdate: String)
+
+@main("Prep Label Scan") {
+
+<div class="democontent">
+  <h3>Prep Recipe Label Scan Successful!</h3>
+  <br><br>
+  You scanned:<br>
+  <div class="table">
+            <div class="row">
+                <div class="cell">
+                    Recipe:</div><div class="cell"> @itemname
+                </div>
+            </div>
+             <div class="row">
+               <div class="cell">
+                    Expiration Date: </div><div class="cell"> @expdate
+                </div>
+            </div>
+      </div>
+
+      <br><br>
+      
+      <a href="#" id="showrecipe">Show Recipe</a>
+      <a href="#" id="enterinventory">Enter Inventory</a>
+      <a href="#" id="cancel">Cancel</a>
+
+            <script>
+                $(document).ready(function() {
+    
+                    $("#showrecipe").kendoButton({});
+
+                    $("#enterinventory").kendoButton({ });
+            
+                    $("#cancel").kendoButton({
+                        icon: "cancel",
+                        click: function(e) {
+                            window.location.href="@routes.Application.index()";
+                        }
+                    });
+
+                });
+            </script>
+  </div>
+}

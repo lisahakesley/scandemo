@@ -1,0 +1,108 @@
+@(message: String)
+
+@main(message) {
+
+   <style>
+   	.k-autocomplete.k-header {
+	    width: 500px;
+	}
+   </style>
+
+   <div class="democontent">
+   <h3>Prep Recipe Label Demo</h3>
+  <br><br>
+  Select a recipe, expiration date, and number of label copies below, then click Print Labels.<br><br>
+   <form id="myForm" action="@routes.PrepRecipe.LabelPrint()" method="post" target="printwnd">
+
+    <div class="table">
+            <div class="row">
+                <div class="cell">
+                    Recipe:</div><div class="cell"> <input id="itemname" name="itemname" style="width: 250px;"/>
+                </div>
+            </div>
+             <div class="row">
+               <div class="cell">
+                    Expiration Date: </div><div class="cell"> <input id="expirationdate" name="expirationdate" style="width: 110px;">
+                </div>
+            </div>
+             <div class="row">                
+                <div class="cell">
+                    Print </div><div class="cell"> <input id="labelcount" name="labelcount" value="1" style="width: 60px;" /> Labels
+                </div>
+            </div>
+             <div class="row">                
+                <div class="cell">
+                    <a id="printlabels">Print Labels</a></div><div class="cell"> 
+                    <a id="cancel" href="@routes.Application.index()">Cancel</a>
+               </div>
+      	</div>
+      </div>
+      </form>
+    </div>
+
+            <script>
+                $(document).ready(function() {
+
+                    // label count numeric text box
+                    $("#labelcount").kendoNumericTextBox({
+                        format: "#",
+                        min: 1,
+                        max: 10,
+                        step: 1
+                    });
+
+                    // prep item expiration date
+                    $("#expirationdate").kendoDatePicker({
+                    	value: new Date()
+                    });
+
+ 	var acDataSource = new kendo.data.DataSource({
+                transport: {
+                  read: {
+                    url: "@routes.Assets.at("data/recipedata.json")",
+                    dataType: "json"
+                  }
+                },
+                schema: {
+                  data: 'recipeData'
+                }
+              });                  
+
+              $("#itemname").kendoAutoComplete({
+                dataTextField: "name",
+                filter: "contains",
+                minLength: 3,
+                dataSource: acDataSource,
+                animation: {
+                  close: {
+                    effects: "fadeOut",
+                    duration: 200
+                  },
+                  open: {
+                    effects: "fadeIn",
+                    duration: 200
+                  }
+                }
+              });
+  
+              $("#printlabels").kendoButton({
+                  imageUrl: "@routes.Assets.at("images/printer.png")",
+              	click: function(e) {
+               		console.log("submit", myForm);
+             		$("#myForm").submit();
+
+              	}
+              });
+
+                $("#cancel").kendoButton({
+              	icon: "cancel",
+              	click: function(e) {
+              		window.location.href="@routes.Application.index()";
+              	}
+              });
+
+            
+                });
+            </script>
+
+}

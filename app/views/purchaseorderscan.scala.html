@@ -1,0 +1,53 @@
+@(vendorName: String, itemName: String, packSize: String)
+
+@main("Prep Label Scan") {
+
+<div class="democontent">
+  <h3>Purchase Order Item Label Scan Successful!</h3>
+  <br><br>
+  You scanned:<br>
+  <div class="table">
+            <div class="row">
+                <div class="cell">
+                    Vendor:</div><div class="cell"> @vendorName
+                </div>
+            </div>
+             <div class="row">
+               <div class="cell">
+                    Item: </div><div class="cell"> @itemName
+                </div>
+            </div>
+             <div class="row">
+               <div class="cell">
+                    Pack Size: </div><div class="cell"> @packSize
+                </div>
+            </div>
+      </div>
+
+      <br><br>
+      <a href="#" id="ordermore">Order More</a>
+      <a href="#" id="enterinventory">Enter Inventory</a>
+      <a href="#" id="cancel">Cancel</a>
+
+  </div>
+
+            <script>
+                $(document).ready(function() {
+    
+                    console.log("hello world");
+                    $("#ordermore").kendoButton({});
+
+                    $("#enterinventory").kendoButton({ });
+            
+                    $("#cancel").kendoButton({
+                        icon: "cancel",
+                        click: function(e) {
+                            window.location.href="@routes.Application.index()";
+                        }
+                    });
+
+                });
+          </script>
+
+
+}

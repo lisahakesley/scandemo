@@ -1,0 +1,114 @@
+@(message: String)
+
+@main(message) {
+
+  <div class="democontent">
+      <h3>Purchase Order Demo</h3>
+      <br><br>
+      Enter a PO number and click Get Order to retrieve purchase order details.<br><br>
+
+          <form id="myForm" action="@routes.PurchaseOrder.LabelPrint()" method="post" target="printwnd">
+                   Purchase Order : <input type="text" name="ponumber" id="ponumber" style="width: 70px;">
+          <a id="getpo">Get Order</a>
+          </form>
+
+      <div id="podetails" style="display: block; margin-top: 20px;">
+
+             <div class="table">
+                    <div class="row">
+                        <div class="cell">PO Date: </div>
+                        <div class="cell"> <span  id="podate"></span></div>
+                    </div>
+                     <div class="row">
+                       <div class="cell">Vendor: </div>
+                       <div class="cell"> <span  id="vendor"></span></div>
+                    </div>
+              </div>
+              <div id="pogrid"   style="margin-top: 20px;"></div>
+              <div style="text-align: right; margin-top: 10px;">
+                  <a id="printlabels">Print Labels</a>
+                    <a id="cancel" href="@routes.Application.index()">Cancel</a>
+              </div>
+
+      </div>
+  </div>
+
+            <script>
+
+                $(document).ready(function() {
+
+                   $("#podetails").hide();
+
+                    var poDataSource = new kendo.data.DataSource({
+                        type: "json",
+                        schema: {
+                          model: { id: "PONumber" }
+                        },
+                        transport: {
+                             read: function (options) {
+                                $.ajax({
+                                    url: "@routes.Assets.at("data/podata.json")",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                });
+                            }
+                        },
+                        change: function(e){
+                              var view = this.view();
+                              $("#podate").text( view[0].PODate );
+                              $("#vendor").text( view[0].Vendor );
+                              console.log("po order items length = ", view[0].OrderItems.length  );
+                              var ds = new kendo.data.DataSource();
+                              ds.data(view[0].OrderItems); 
+                              $("#pogrid").data("kendoGrid").setDataSource( ds );
+
+                        }
+                    });
+
+                    $("#pogrid").kendoGrid({
+                        sortable: true,
+                        columns: [
+                            { field: "Description", title: "Item Description" },
+                            { field: "PackSize", title: "Pack Size" },
+                            { field: "Qty", title: "Quantity" }
+                        ]
+                    });        
+
+
+
+                    $("#getpo").kendoButton({
+                      spriteCssClass: "k-icon k-i-search",
+                      click: function(e) {
+                        var ponumber = $("#ponumber").val();
+                        console.log("ponumber = ", ponumber );
+                        poDataSource.filter( { field: "PONumber", operator: "equals", value: ponumber }); 
+                        $("#podetails").show();
+
+                      }
+                    });
+
+                    $("#ponumber").kendoMaskedTextBox({
+                      });
+
+
+                $("#printlabels").kendoButton({
+                  imageUrl: "@routes.Assets.at("images/printer.png")",
+                  click: function(e) {
+                    console.log("submit", myForm);
+                  $("#myForm").submit();
+
+                  }
+                });
+                
+                $("#cancel").kendoButton({
+                icon: "cancel",
+                click: function(e) {
+                  window.location.href="@routes.Application.index()";
+                }
+              });          
+                });
+            </script>
+
+}

@@ -1,0 +1,22 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+
+# Prep label demo pages
+GET	/preplabel/label	controllers.PrepRecipe.LabelGen()
+POST	/preplabel/label 	controllers.PrepRecipe.LabelPrint()
+GET	/preplabel/scan		controllers.PrepRecipe.Scan()
+
+
+# Purchase order demo pages
+GET	/purchaseorder/po 	controllers.PurchaseOrder.PODisplay()
+POST	/purchaseorder/po 	controllers.PurchaseOrder.LabelPrint()
+GET 	/purchaseorder/scan 	controllers.PurchaseOrder.Scan()
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

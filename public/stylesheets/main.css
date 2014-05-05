@@ -1,0 +1,14 @@
+
+.table {
+	display: table;
+}
+.row {
+	display: table-row;
+}
+.cell {
+	display: table-cell;
+	padding: 5px;
+}
+.democontent {
+	margin: 100px;
+}
